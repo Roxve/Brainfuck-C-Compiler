@@ -3,7 +3,7 @@
 #include <vector>
 #include <numeric>
 #include <sstream>
-
+#include <fstream>
 using namespace std;
 
 enum TokenType {
@@ -89,9 +89,23 @@ class Tokenizer {
 };
 
 int main() {
-  cout << "enter code: ";
+  cout << "enter file path: ";
+
+  string pathr;
+  cin >> pathr;
+  ifstream fileToRead(pathr);
+
   string code;
-  cin >> code;
+  if(fileToRead) {
+    ostringstream ss;
+    ss << fileToRead.rdbuf();
+    code = ss.str();
+  }
+  else {
+    cout << "file " << pathr << " not found or not readable..." << endl;
+    return 1;
+  }
+
   Tokenizer* tokenizer = new Tokenizer(code);
   vector<Token> tokens = tokenizer->tokenize();
   stringstream ss;
